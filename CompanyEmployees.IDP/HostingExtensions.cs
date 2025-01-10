@@ -19,6 +19,7 @@ internal static class HostingExtensions
             .AddInMemoryIdentityResources(Config.Ids)
             .AddDeveloperSigningCredential()
             .AddInMemoryApiScopes(Config.ApiScopes)
+            .AddInMemoryApiResources(Config.Apis)
             .AddInMemoryClients(Config.Clients)
             .AddTestUsers(TestUsers.Users);
 

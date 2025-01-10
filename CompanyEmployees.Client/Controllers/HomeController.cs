@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text.Json;
@@ -25,11 +26,22 @@ namespace CompanyEmployees.Client.Controllers
         {
             var httpClient = _httpClientFactory.CreateClient("APIClient");
             var response = await httpClient.GetAsync("/api/companies").ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var companiesString = await response.Content.ReadAsStringAsync();
-            var companies = JsonSerializer.Deserialize<List<CompanyViewModel>>(companiesString,
-           new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            return View(companies);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var companiesString = await response.Content.ReadAsStringAsync();
+                var companies = JsonSerializer.Deserialize<List<CompanyViewModel>>(companiesString,
+               new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                return View(companies);
+            }
+            else if(response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+
+
+            throw new Exception("There is a problem accessing the API");
         }
 
 
