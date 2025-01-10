@@ -41,7 +41,8 @@ public static class TestUsers
                         new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
                         new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json),
 
-                        new Claim("address", "Alice Alice's Avenue 214")
+                        new Claim("address", "Alice Alice's Avenue 214"),
+                        new Claim("role", "Administrator")
                     }
                 },
                 new TestUser
@@ -59,7 +60,8 @@ public static class TestUsers
                         new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                         new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json),
 
-                         new Claim("address", "Bob bob's Avenue 215")
+                         new Claim("address", "Bob bob's Avenue 215"),
+                         new Claim("role", "Visitor")
                     }
                 }
             };
