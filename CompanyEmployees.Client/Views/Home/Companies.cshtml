@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<CompanyEmployees.Client.Models.CompanyViewModel>?
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Companies"; ;
@@ -7,7 +9,7 @@
 
 
 <h1>Companies</h1>
-@if (User.IsInRole("Administrator"))
+@if ((await AuthorizationService.AuthorizeAsync(User, "CanCreateAndModifyData")).Succeeded)
 {
     <p>
         <a asp-action="Create">Create New</a>
@@ -38,7 +40,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.FullAddress)
                     </td>
-                    @if(User.IsInRole("Administrator")){
+                    @if((await AuthorizationService.AuthorizeAsync(User, "CanCreateAndModifyData")).Succeeded){
                         <td>
                             @Html.ActionLink("Edit", "Edit", new {/* id = item.PrimaryKey */})
                             @Html.ActionLink("Details", "Details", new {/* id = item.PrimaryKey */})

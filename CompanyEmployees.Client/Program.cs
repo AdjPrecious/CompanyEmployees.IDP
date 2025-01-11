@@ -15,7 +15,17 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 
 // Add services to the container.
+builder.Services.AddAuthorization(authOpt =>
+{
+    authOpt.AddPolicy("CanCreateAndModifyData", policyBuilder =>
+    {
+        policyBuilder.RequireAuthenticatedUser();
+        policyBuilder.RequireRole("role", "Administrator");
+        policyBuilder.RequireClaim("country", "USA");
+    });
+});
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<BearerTokenHandler>();
 builder.Services.AddAuthentication(options =>
@@ -39,17 +49,17 @@ builder.Services.AddAuthentication(options =>
         opt.Scope.Add("roles");
         opt.ClaimActions.MapUniqueJsonKey("role", "role");
         opt.Scope.Add("companyemployeeapi.scope");
+        opt.Scope.Add("country");
+        opt.ClaimActions.MapUniqueJsonKey("country", "country");
         opt.TokenValidationParameters = new TokenValidationParameters
         {
             RoleClaimType = JwtClaimTypes.Role
         };
-            
-
-
-
 
     }
     );
+
+
 
 builder.Services.AddHttpClient("APIClient", client =>
 {
