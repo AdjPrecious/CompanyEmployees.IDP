@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(options =>
         {
             RoleClaimType = JwtClaimTypes.Role
         };
+        opt.Scope.Add("offline_access");
 
     }
     );

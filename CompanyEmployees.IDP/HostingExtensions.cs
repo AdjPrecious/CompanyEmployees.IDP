@@ -1,27 +1,37 @@
 
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace CompanyEmployees.IDP;
 
 internal static class HostingExtensions
 {
+   
+
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
         // uncomment if you want to add a UI
         builder.Services.AddRazorPages();
         
+        var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
         builder.Services.AddIdentityServer(options =>
             {
                 // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
                 options.EmitStaticAudienceClaim = true;
+        })
+            .AddDeveloperSigningCredential()           
+            .AddTestUsers(TestUsers.Users)
+            .AddConfigurationStore(opt =>
+            {
+                opt.ConfigureDbContext = c => c.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), sql => sql.MigrationsAssembly(migrationsAssembly));
             })
-            .AddInMemoryIdentityResources(Config.Ids)
-            .AddDeveloperSigningCredential()
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryApiResources(Config.Apis)
-            .AddInMemoryClients(Config.Clients)
-            .AddTestUsers(TestUsers.Users);
+            .AddOperationalStore(opt =>
+            {
+                opt.ConfigureDbContext = o => o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), sql => sql.MigrationsAssembly(migrationsAssembly));
+            });
+
+
 
         return builder.Build();
     }
