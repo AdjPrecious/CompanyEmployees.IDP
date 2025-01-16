@@ -1,4 +1,6 @@
 
+using CompanyEmployees.IDP.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -15,13 +17,22 @@ internal static class HostingExtensions
         
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
+        builder.Services.AddDbContext<UserContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("identitySqlConnection"));
+        });
+
+        builder.Services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<UserContext>()
+            .AddDefaultTokenProviders();
+
         builder.Services.AddIdentityServer(options =>
             {
                 // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
                 options.EmitStaticAudienceClaim = true;
         })
             .AddDeveloperSigningCredential()           
-            .AddTestUsers(TestUsers.Users)
+            
             .AddConfigurationStore(opt =>
             {
                 opt.ConfigureDbContext = c => c.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), sql => sql.MigrationsAssembly(migrationsAssembly));
@@ -29,7 +40,10 @@ internal static class HostingExtensions
             .AddOperationalStore(opt =>
             {
                 opt.ConfigureDbContext = o => o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), sql => sql.MigrationsAssembly(migrationsAssembly));
-            });
+            })
+            .AddAspNetIdentity<User>();
+
+
 
 
 
