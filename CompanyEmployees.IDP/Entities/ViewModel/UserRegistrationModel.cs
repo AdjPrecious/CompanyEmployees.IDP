@@ -5,7 +5,7 @@ namespace CompanyEmployees.IDP.Entities.ViewModel
     public class UserRegistrationModel
     {
         public string FirstName { get; set; } 
-        public string Lastame { get; set; }
+        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; }

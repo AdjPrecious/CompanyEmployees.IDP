@@ -6,35 +6,57 @@
         <h1>Create Account</h1>
     </div>
 
-    <partial name="_ValidationSummary" />
+
 
     <div class="row">
 
         <div class="col-sm-6">
-            <form asp-page="/Account/Create/Index">
-                <input type="hidden" asp-for="Input.ReturnUrl" />
+            <form asp-page="/Account/Create/Index" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                <partial name="_ValidationSummary" />
+                
 
                 <div class="form-group">
-                    <label asp-for="Input.Username"></label>
-                    <input class="form-control" placeholder="Username" asp-for="Input.Username" autofocus>
+                    <label asp-for="Input.FirstName"></label>
+                    <input class="form-control" placeholder="FirstName" asp-for="Input.FirstName" autofocus>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input type="password" class="form-control" placeholder="Password" asp-for="Input.Password" autocomplete="off">
+                    <label asp-for="Input.LastName"></label>
+                    <input class="form-control" placeholder="LastName" asp-for="Input.LastName" autofocus>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Name"></label>
-                    <input type="text" class="form-control" placeholder="Name" asp-for="Input.Name">
+                    <label asp-for="Input.Address"></label>
+                    <input class="form-control" placeholder="Address" asp-for="Input.Address" autofocus>
+                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Country"></label>
+                    <input class="form-control" placeholder="Country" asp-for="Input.Country" autofocus>
+                    <span asp-validation-for="Input.Country" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.Email"></label>
-                    <input type="email" class="form-control" placeholder="Email" asp-for="Input.Email" >
+                    <input type="email" class="form-control" placeholder="email" asp-for="Input.Email" autofocus>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input type="password" class="form-control" placeholder="Password" asp-for="Input.Password">
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                </div>
+                 <div class="form-group">
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <input type="password" class="form-control" placeholder="Password" asp-for="Input.ConfirmPassword">
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
 
-                <button class="btn btn-primary" name="Input.Button" value="create">Create</button>
-                <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
+                <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-primary" />
+                </div>
             </form>
         </div>
-        
+
     </div>
 </div>

@@ -14,7 +14,8 @@ internal static class HostingExtensions
     {
         // uncomment if you want to add a UI
         builder.Services.AddRazorPages();
-        
+        builder.Services.AddAutoMapper(typeof(Program));
+
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
         builder.Services.AddDbContext<UserContext>(options =>
@@ -22,7 +23,7 @@ internal static class HostingExtensions
             options.UseSqlServer(builder.Configuration.GetConnectionString("identitySqlConnection"));
         });
 
-        builder.Services.AddIdentity<User, IdentityRole>()
+        builder.Services.AddIdentity<User, IdentityRole>(opt => { opt.Password.RequireDigit = false;opt.Password.RequiredLength = 7; opt.Password.RequireUppercase = false; })
             .AddEntityFrameworkStores<UserContext>()
             .AddDefaultTokenProviders();
 
@@ -68,9 +69,13 @@ internal static class HostingExtensions
         app.UseIdentityServer();
 
         // uncomment if you want to add a UI
+        app.UseAuthentication();
+
         app.UseAuthorization();
 
-        app.MapRazorPages().RequireAuthorization();
+        app.MapRazorPages();
+
+        
 
         return app;
     }

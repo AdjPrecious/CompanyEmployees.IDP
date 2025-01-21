@@ -7,16 +7,29 @@ namespace CompanyEmployees.IDP.Pages.Create;
 
 public class InputModel
 {
-    [Required]
-    public string? Username { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 
-    [Required]
-    public string? Password { get; set; }
+    
 
-    public string? Name { get; set; }
-    public string? Email { get; set; }
+    [Required(ErrorMessage = "Address is required")]
+    public string Address { get; set; }
 
-    public string? ReturnUrl { get; set; }
+    [Required(ErrorMessage = "Country is required")]
+    public string Country { get; set; }
 
-    public string? Button { get; set; }
+    [Required(ErrorMessage = "Email is required")]
+    public string Email { get; set; }
+
+    [Required(ErrorMessage = "Password is required")]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
+
+    [DataType(DataType.Password)]
+    [Compare("Password", ErrorMessage = "The password and confirmation password do not nmatch.")]
+    public string ConfirmPassword { get; set; }
+
+   
+
+
 }

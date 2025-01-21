@@ -25,19 +25,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Companies">Companies</a>
                         </li>
 
-                        @if(User.IsInRole("Administrator")){
+                        @if (User.IsInRole("Administrator"))
+                        {
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
                         }
                     </ul>
-                    @if(!User.Identity.IsAuthenticated){
+                    @if (!User.Identity.IsAuthenticated)
+                    {
                         <section>
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
                         </section>
+                        @*  <section>
+                            <a class="nav-link text-dark" href="https://localhost:5002/Register?returrnUrl=https://localhost:5197"  >Register</a>
+                        </section> *@
+                        <section>
+                            <a class="nav-link text-dark" href="https://localhost:5002/Account/Create?returnUrl=https://localhost:5197">Register</a>
+                        </section>
                     }
-                    else{
+                    else
+                    {
                         <section>
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
                         </section>
