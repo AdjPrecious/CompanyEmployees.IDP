@@ -8,6 +8,7 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
+using EmailService;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,7 @@ public class Index : PageModel
     private readonly IMapper _mapper;
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
+    private readonly IEmailSender _emailSender;
 
     [BindProperty]
     public InputModel Input { get; set; } = default!;
@@ -34,7 +36,7 @@ public class Index : PageModel
 
 
     public Index(
-        IIdentityServerInteractionService interaction, IMapper mapper, SignInManager<User> signInManager, UserManager<User> userManager)
+        IIdentityServerInteractionService interaction, IMapper mapper, SignInManager<User> signInManager, UserManager<User> userManager, IEmailSender emailSender)
        
     {
         // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
@@ -44,6 +46,7 @@ public class Index : PageModel
         _mapper = mapper;
         _signInManager = signInManager;
         _userManager = userManager;
+        _emailSender = emailSender;
     }
 
     public IActionResult OnGet(string returnUrl)

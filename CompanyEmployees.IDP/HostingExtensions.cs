@@ -1,5 +1,6 @@
 
 using CompanyEmployees.IDP.Entities;
+using EmailService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -15,6 +16,10 @@ internal static class HostingExtensions
         // uncomment if you want to add a UI
         builder.Services.AddRazorPages();
         builder.Services.AddAutoMapper(typeof(Program));
+
+        var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+        builder.Services.AddSingleton(emailConfig);
+        builder.Services.AddScoped<IEmailSender, EmailSender>();
 
         var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
 
@@ -45,7 +50,7 @@ internal static class HostingExtensions
             .AddAspNetIdentity<User>();
 
 
-
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(2));
 
 
         return builder.Build();
